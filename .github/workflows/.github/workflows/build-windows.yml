@@ -1,0 +1,28 @@
+name: Build WinQuickLook Windows
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout source
+      uses: actions/checkout@v4
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v2
+
+    - name: Build WinQuickLook (Release x64)
+      run: |
+        msbuild WinQuickLook.slnx ^
+          /p:Configuration=Release ^
+          /p:Platform=x64
+
+    - name: Upload EXE
+      uses: actions/upload-artifact@v4
+      with:
+        name: WinQuickLook-Windows-x64
+        path: |
+          **/Release/*.exe
